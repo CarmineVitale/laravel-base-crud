@@ -9,9 +9,9 @@ class StudentController extends Controller
 {
     public function index() {
 
-        $students = Student::where('id', '<>', 2)->orderBy('id', 'desc')->limit(2)->get();
+        //$students = Student::where('id', '<>', 2)->orderBy('id', 'desc')->limit(2)->get();
 
-        //$students = Student::all()->orderBy('matricola', 'desc')->get();
+        $students = Student::all()->sortBy('surname');
 
 
         return view('welcome', compact('students'));
