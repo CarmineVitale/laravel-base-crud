@@ -11,7 +11,7 @@ class StudentController extends Controller
 
         //$students = Student::where('id', '<>', 2)->orderBy('id', 'desc')->limit(2)->get();
 
-        $students = Student::all()->sortBy('surname');
+        $students = Student::all();
 
 
         return view('welcome', compact('students'));

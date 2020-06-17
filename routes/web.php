@@ -13,4 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'StudentController@index');
+Route::get('/', 'StudentController@index')->name('homepage');
