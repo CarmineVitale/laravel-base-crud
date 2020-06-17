@@ -11,12 +11,12 @@
     <header class="mb-5">
         <nav class="navbar navbar-expand navbar-dark bg-dark">
             <div class="nav-brand">
-                <h2 class="text-success"> Boolean Students</h2>
+                <h2 class="text-success"> Boolean</h2>
             </div>
             <ul class="navbar-nav ml-auto">
-             <li class="nav-item"><a class="nav-link" href=" {{ route('homepage')}}">Home</a></li>
-             <li class="nav-item"><a class="nav-link" href=" #">Tutti gli studenti</a></li>
-             <li class="nav-item"><a class="nav-link" href=" #">OK</a></li>
+             <li class="nav-item"><a class="nav-link" href=" {{ route('homepage')}}">Gli studenti</a></li>
+             <li class="nav-item"><a class="nav-link" href=" {{ route('contents.index')}}">Gli insegnanti</a></li>
+             <li class="nav-item"><a class="nav-link" href=" {{ route('contents.create')}}">Aggiungi un nuovo insegnante</a></li>
             </ul>
         </nav>
     </header>
