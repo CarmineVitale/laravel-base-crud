@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Content;
+use Illuminate\Validation\Rule;
 
 class ContentController extends Controller
 {
@@ -38,23 +39,32 @@ class ContentController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
-          $request->validate([
-            'nome' => 'required|unique:contents',
-            'cognome' => 'required|unique:contents',
-            'ruolo' => 'required',
-            'caratteristiche' => 'required'
-        ]);
+        //VALIDAZIONE 
+        // $request->validate([
+        //     'nome' => 'required|unique:contents',
+        //     'cognome' => 'required|unique:contents',
+        //     'ruolo' => 'required',
+        //     'caratteristiche' => 'required'
+        // ]);
+        //VALIDAZIONE CON FUNZIONE
+        $request->validate($this->validation());
 
         $teacher = new Content();
-        $teacher->nome = $data['nome'];
-        $teacher->cognome = $data['cognome'];
-        $teacher->ruolo = $data['ruolo'];
-        $teacher->caratteristiche = $data['caratteristiche'];
+        // $teacher->nome = $data['nome'];
+        // $teacher->cognome = $data['cognome'];
+        // $teacher->ruolo = $data['ruolo'];
+        // $teacher->caratteristiche = $data['caratteristiche'];
+
+        //Alternativa a scrivere tutta quella cosa sopra, 
+        //poi questo fill si gestisce in $fillable nel modello Content.php
+        
+        $teacher->fill($data);
+
+        
         $saved = $teacher->save();
         
         if ($saved) {
-            return redirect()->route('contents.show', Content::find($teacher->id));
+            return redirect()->route('contents.show', Content::find($teacher->id))->with('saved', $saved);
         }
         
     }
@@ -67,7 +77,7 @@ class ContentController extends Controller
      */
     public function show(Content $content)
     {
-
+        //La stringa  tra parentesi sopra dietro le quinte fa questo: $content = Content::find($id);
         return view('teachers.show', compact('content'));
     }
 
@@ -77,9 +87,9 @@ class ContentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Content $content)
     {
-        //
+        return view('teachers.edit' , compact('content'));
     }
 
     /**
@@ -89,9 +99,20 @@ class ContentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Content $content)
     {
-        //
+        $data = $request->all();
+
+        $request->validate($this->validation($content->id));
+
+        $updated = $content->update($data);
+
+        if ($updated) {
+            return redirect()->route('contents.show', $content->id);
+        }
+
+        
+
     }
 
     /**
@@ -100,8 +121,30 @@ class ContentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Content $content)
     {
-        //
+        //potremmo portarci in WITH() questa referenza in modo da farala passare poi alla vista se volessimo indicare nome e cognome dell'insegnante eliminato
+        //$ref = $content->nome . ' ' . $content->cognome;
+
+        $deleted = $content->delete();
+
+        if ($deleted) {
+            return redirect()->route('contents.index')->with('deleted', $deleted);
+        }
+    }
+
+
+    //UTILITIES PER NON RIPETERE VALIDAZIONE
+    private function validation($id = null) {
+        return [
+            'nome' => 'required',
+            'cognome' => [
+                'required',
+                'max:20',
+                Rule::unique('contents')->ignore($id)
+            ],
+            'ruolo' => 'required|max:20',
+            'caratteristiche' => 'required'
+        ];
     }
 }

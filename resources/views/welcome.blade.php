@@ -19,7 +19,7 @@
                     <td>{{ $student->matricola }}</td>
                     <td>{{ $student->name }} {{ $student->surname }}</td>
                     <td>{{ $student->description }}</td>
-                    <td></td>
+                    <td><a class="btn btn-primary" href="{{ route('dettaglio')}}">SHOW</a></td>
                 </tr>
                 @endforeach
             </tbody>

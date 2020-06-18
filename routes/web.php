@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'StudentController@index')->name('homepage');
+Route::get('/dettaglio', 'StudentController@show')->name('dettaglio');
 
 Route::resource('contents', 'ContentController');

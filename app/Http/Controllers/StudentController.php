@@ -16,4 +16,8 @@ class StudentController extends Controller
 
         return view('welcome', compact('students'));
     }
+
+    public function show() {
+        return view('students.show');
+    }
 }
